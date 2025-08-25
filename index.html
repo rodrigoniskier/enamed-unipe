@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Prompts para ENAMED 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Estilização da barra de rolagem */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="%236b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7l3-3 3 3m0 6l-3 3-3-3"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-5xl">
+        <header class="text-center mb-8">
+            <!-- Adicione o caminho para o seu arquivo logo.png aqui -->
+            <img src="logo.png" alt="Logo da Instituição" class="mx-auto h-20 w-auto mb-4" onerror="this.src='https://placehold.co/300x80/007bff/ffffff?text=Sua+Logo+Aqui&font=inter'">
+            <h1 class="text-3xl sm:text-4xl font-bold text-blue-700">Gerador de Prompts para ENAMED 2025</h1>
+            <p class="text-gray-600 mt-2 text-md sm:text-lg">Crie prompts personalizados para gerar questões de simulados com base nos documentos oficiais.</p>
+        </header>
+
+        <main class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                <!-- Coluna de Seletores 1 -->
+                <div class="space-y-6">
+                    <div>
+                        <label for="area-formacao" class="block text-sm font-medium text-gray-700 mb-1">🩺 Área de Formação Médica (Art. 3º)</label>
+                        <select id="area-formacao" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                            <!-- Opções serão inseridas via JavaScript -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="perfil" class="block text-sm font-medium text-gray-700 mb-1">👤 Perfil do Avaliado (Art. 5º)</label>
+                        <select id="perfil" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                            <!-- Opções serão inseridas via JavaScript -->
+                        </select>
+                    </div>
+                     <div>
+                        <label for="competencias" class="block text-sm font-medium text-gray-700 mb-1">🎯 Competências (Art. 6º)</label>
+                        <select id="competencias" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                            <!-- Opções serão inseridas via JavaScript -->
+                        </select>
+                    </div>
+                </div>
+                <!-- Coluna de Seletores 2 -->
+                <div class="space-y-6">
+                   <div>
+                        <label for="dc1" class="block text-sm font-medium text-gray-700 mb-1">📚 Domínio de Conteúdo 1 (Art. 8º)</label>
+                        <select id="dc1" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                            <!-- Opções serão inseridas via JavaScript -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="dc2" class="block text-sm font-medium text-gray-700 mb-1">📚 Domínio de Conteúdo 2 (Art. 8º)</label>
+                        <select id="dc2" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                            <!-- Opções serão inseridas via JavaScript -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="dc3" class="block text-sm font-medium text-gray-700 mb-1">📚 Domínio de Conteúdo 3 (Art. 8º)</label>
+                        <select id="dc3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                            <!-- Opções serão inseridas via JavaScript -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+             <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 mt-6">
+                <div>
+                    <label for="quantidade-questoes" class="block text-sm font-medium text-gray-700 mb-1">🔢 Quantidade de Questões</label>
+                    <input type="number" id="quantidade-questoes" value="1" min="1" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                </div>
+                <div>
+                    <label for="taxonomia-bloom" class="block text-sm font-medium text-gray-700 mb-1">🧠 Taxonomia de Bloom</label>
+                    <select id="taxonomia-bloom" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                        <!-- Opções serão inseridas via JavaScript -->
+                    </select>
+                </div>
+                <div>
+                    <label for="nivel-dificuldade" class="block text-sm font-medium text-gray-700 mb-1">🔥 Nível de Dificuldade</label>
+                    <select id="nivel-dificuldade" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                        <!-- Opções serão inseridas via JavaScript -->
+                    </select>
+                </div>
+            </div>
+             <div class="mt-6">
+                <label for="tipo-questao" class="block text-sm font-medium text-gray-700 mb-1">📝 Tipo de Questão</label>
+                <select id="tipo-questao" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                    <!-- Opções serão inseridas via JavaScript -->
+                </select>
+            </div>
+
+            <div class="mt-8 text-center">
+                <button id="gerar-prompt" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-transform transform hover:scale-105 inline-flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                    Gerar Prompt
+                </button>
+            </div>
+
+            <div id="resultado-prompt" class="mt-8 hidden fade-in">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">✨ Prompt Gerado:</h2>
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 relative">
+                    <textarea id="prompt-texto" readonly class="w-full h-64 bg-transparent border-none resize-none focus:outline-none text-gray-700"></textarea>
+                    <button id="copiar-prompt" title="Copiar Prompt" class="absolute top-3 right-3 bg-gray-200 text-gray-700 p-2 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path>
+                            <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div id="copy-feedback" class="text-green-600 text-sm mt-2 text-center hidden">Copiado! ✅</div>
+            </div>
+        </main>
+
+        <footer class="text-center mt-8 text-sm text-gray-500">
+            <p>📄 &copy; 2025 - Ferramenta de Apoio para Elaboração de Questões ENAMED. Desenvolvido com base nos documentos oficiais.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- DADOS EXTRAÍDOS DOS DOCUMENTOS OFICIAIS E PEDAGÓGICOS ---
+
+            const tiposDeQuestao = [
+                "Resposta Única",
+                "Resposta Múltipla"
+            ];
+
+            const taxonomiaBloom = [
+                "Lembrar",
+                "Compreender",
+                "Aplicar",
+                "Analisar",
+                "Avaliar",
+                "Criar"
+            ];
+
+            const niveisDificuldade = [
+                "Fácil",
+                "Médio",
+                "Difícil"
+            ];
+
+            const areasDeFormacao = [
+                "Clínica Médica",
+                "Cirurgia Geral",
+                "Ginecologia e Obstetrícia",
+                "Pediatria",
+                "Medicina da Família e Comunidade",
+                "Saúde Mental",
+                "Saúde Coletiva"
+            ];
+
+            const perfis = [
+                "I. Comprometido com o respeito à singularidade de cada pessoa e grupo social, considerando as diversões biológica, subjetiva, étnico-racial, de gênero, de orientação sexual, socioeconômica, política, ambiental, cultural e ética, visando à equidade, ao acesso, à integralidade e à humanização do cuidado em saúde.",
+                "II. Defensor da cidadania e da dignidade humana, respeitando as relações entre ser humano, o meio ambiente, sociedade e tecnologias e exercendo posição de defesa contra toda e qualquer forma de violência.",
+                "III. Crítico e reflexivo em relação ao seu fazer profissional, combinando conhecimento clínico com as melhores evidências científicas disponíveis, com políticas públicas e com diretrizes vigentes, orientado pelos princípios de custo-efetividade e eficácia.",
+                "IV. Orientado pelos princípios da ética e da bioética na relação com os usuários dos serviços de saúde, na relação com os familiares desses usuários, bem como com a comunidade e com a equipe interprofissional, respeitando a autonomia do paciente e abordando a terminalidade da vida de forma respeitosa e sensível.",
+                "V. Embasado em uma formação geral, atuando na prevenção, promoção, recuperação e reabilitação à saúde, valorizando aspectos epidemiológicos, organizacionais e de gestão do sistema de saúde, tendo como referenciais a determinação social do processo de saúde e de doença e a ênfase na atenção primária à saúde.",
+                "VI. Comprometido com a sua formação continuada e com a sua formação em serviço, bem como com o aprendizado interprofissional e com a formação das futuras gerações de profissionais de saúde.",
+                "VII. Orientado para uma clínica centrada na pessoa, que respeite o saber experiencial do usuário dos serviços de saúde e que articule o cuidado com os demais pontos de atenção da rede de saúde, de forma transdisciplinar, valorizando assim o trabalho em equipe."
+            ];
+
+            const competencias = [
+                "I. Respeitar a singularidade de cada pessoa e grupo social...",
+                "II. Formular hipóteses diagnósticas plausíveis e plano propedêutico adequado...",
+                "III. Solicitar e interpretar exames complementares...",
+                "IV. Elaborar, pactuar e acompanhar o plano terapêutico individual...",
+                "V. Reconhecer, diagnosticar e tratar as urgências e as emergências...",
+                "VI. Indicar e realizar procedimentos médicos clínicos ou cirúrgicos...",
+                "VII. Identificar as necessidades de saúde de grupos de pessoas ou de comunidades...",
+                "VIII. Planejar, implementar, gerenciar e avaliar planos e projetos de intervenção coletiva...",
+                "IX. Identificar e promover os princípios, as diretrizes e as políticas dos sistemas de saúde...",
+                "X. Comunicar-se, por meio de linguagem adequada, verbal e não verbal...",
+                "XI. Aplicar os princípios do trabalho em equipe...",
+                "XII. Registrar no prontuário, de forma clara e objetiva...",
+                "XIII. Respeitar as normas éticas e deontológicas do exercício profissional...",
+                "XIV. Ter atitude autorreflexiva, identificando lacunas de conhecimento...",
+                "XV. Utilizar as novas tecnologias da informação e comunicação na prática médica..."
+            ];
+
+            const dominiosDeConteudo = [
+                "I. Bases moleculares e celulares dos processos normais e alterados...",
+                "II. Processos fisiológicos dos seres humanos nas diferentes fases do ciclo de vida.",
+                "III. Determinantes sociais, culturais, comportamentais, psicológicos e ecológicos...",
+                "IV. Ética, bioética, relação médico-paciente e segurança de dados.",
+                "V. Direitos humanos e inclusão...",
+                "VI. Semiologia médica (anamnese e exame físico)...",
+                "VII. Habilidades de comunicação com o paciente, sua família, membros da comunidade...",
+                "VIII. Registro e documentação médica.",
+                "IX. Propedêutica e diagnóstico dos problemas de saúde, doenças e agravos...",
+                "X. Terapêutica dos problemas de saúde, doenças e agravos...",
+                "XI. Prognóstico e prevenção, em diferentes pontos das redes de atenção...",
+                "XII. Reabilitação física e psicossocial baseadas na autonomia...",
+                "XIII. Promoção e educação em saúde.",
+                "XIV. Políticas de saúde e Sistema Único de Saúde (SUS).",
+                "XV. Planejamento e gestão de serviços de saúde.",
+                "XVI. Epidemiologia, indicadores de saúde e sistemas de informação.",
+                "XVII. Vigilância em saúde e controle de doenças e agravos...",
+                "XVIII. Saúde ambiental e ocupacional.",
+                "XIX. Liderança colaborativa, decisão compartilhada e trabalho em equipe...",
+                "XX. Metodologia científica, medicina baseada em evidências...",
+                "XXI. Uso de tecnologias de comunicação e informação..."
+            ];
+
+            // --- LÓGICA DA APLICAÇÃO ---
+
+            function populateSelect(selectId, options) {
+                const select = document.getElementById(selectId);
+                if (!select) return;
+                select.innerHTML = '';
+                options.forEach(optionText => {
+                    const option = document.createElement('option');
+                    option.value = optionText;
+                    option.textContent = optionText.length > 90 ? optionText.substring(0, 90) + '...' : optionText;
+                    select.appendChild(option);
+                });
+            }
+
+            populateSelect('tipo-questao', tiposDeQuestao);
+            populateSelect('taxonomia-bloom', taxonomiaBloom);
+            populateSelect('nivel-dificuldade', niveisDificuldade);
+            populateSelect('area-formacao', areasDeFormacao);
+            populateSelect('perfil', perfis);
+            populateSelect('competencias', competencias);
+            populateSelect('dc1', dominiosDeConteudo);
+            populateSelect('dc2', dominiosDeConteudo);
+            populateSelect('dc3', dominiosDeConteudo);
+
+            const gerarBtn = document.getElementById('gerar-prompt');
+            const copiarBtn = document.getElementById('copiar-prompt');
+            const resultadoDiv = document.getElementById('resultado-prompt');
+            const promptTextarea = document.getElementById('prompt-texto');
+            const copyFeedback = document.getElementById('copy-feedback');
+
+            gerarBtn.addEventListener('click', function() {
+                const quantidade = document.getElementById('quantidade-questoes').value;
+                const taxonomia = document.getElementById('taxonomia-bloom').value;
+                const dificuldade = document.getElementById('nivel-dificuldade').value;
+                const tipoQuestao = document.getElementById('tipo-questao').value;
+                const areaFormacao = document.getElementById('area-formacao').value;
+                const perfil = document.getElementById('perfil').value;
+                const competencias = document.getElementById('competencias').value;
+                const dc1 = document.getElementById('dc1').value;
+                const dc2 = document.getElementById('dc2').value;
+                const dc3 = document.getElementById('dc3').value;
+
+                const promptGerado = `
+**Instrução para IA Generativa - Elaboração de Questão para ENAMED 2025**
+
+**Objetivo:** Elaborar ${quantidade} questão(ões) para um simulado do Exame Nacional de Avaliação de Médicos (ENAMED) 2025.
+
+**Diretrizes:** A(s) questão(ões) deve(m) seguir rigorosamente as especificações da Portaria Nº 478/2025 e das Diretrizes Curriculares Nacionais do Curso de Medicina.
+
+**Estrutura da Questão:**
+1.  **Tipo de Questão:** ${tipoQuestao}.
+2.  **Contexto Clínico:** Crie um cenário clínico detalhado e realista, preferencialmente em um ambiente de Atenção Primária ou Secundária do SUS.
+3.  **Enunciado:** Apresente o caso clínico e formule uma pergunta clara e objetiva.
+
+**Diretrizes de Acessibilidade e Cognição:**
+* **Nível Cognitivo (Bloom):** A questão deve ser do nível "${taxonomia}".
+* **Nível de Dificuldade:** ${dificuldade}.
+* **Formatação para Neurodivergentes:** Elabore a questão com atenção à acessibilidade cognitiva. Use linguagem direta e clara, evite duplas negativas. Destaque em **negrito** os termos e informações mais importantes no enunciado. Utilize parágrafos curtos e garanta um bom espaçamento entre as linhas e as alternativas para facilitar a leitura e reduzir a carga cognitiva.
+
+**Parâmetros a serem Avaliados:**
+* **Área de Formação Médica Principal (Art. 3º):** ${areaFormacao}
+* **Perfil do Avaliado (Art. 5º):** A questão deve ser elaborada para que o candidato demonstre o seguinte perfil: "${perfil}"
+* **Competências Essenciais (Art. 6º):** A resolução da questão deve exigir a aplicação da seguinte competência: "${competencias}"
+* **Domínio de Conteúdos (Art. 8º):** A questão deve abordar, de forma integrada, os seguintes domínios de conteúdo:
+    1.  ${dc1}
+    2.  ${dc2}
+    3.  ${dc3}
+
+**Formato da Resposta:**
+* Apresente 5 alternativas (A, B, C, D, E).
+* Apenas uma alternativa deve ser a correta.
+* As alternativas incorretas (distratores) devem ser plausíveis, mas conceitualmente erradas.
+* Ao final, forneça o gabarito e uma justificativa detalhada para a alternativa correta, explicando o raciocínio clínico e teórico esperado, e por que as outras alternativas estão incorretas.
+`;
+
+                promptTextarea.value = promptGerado.trim();
+                resultadoDiv.classList.remove('hidden');
+            });
+            
+            copiarBtn.addEventListener('click', function() {
+                promptTextarea.select();
+                try {
+                    document.execCommand('copy');
+                    copyFeedback.classList.remove('hidden');
+                    setTimeout(() => {
+                        copyFeedback.classList.add('hidden');
+                    }, 2000);
+                } catch (err) {
+                    console.error('Falha ao copiar o texto: ', err);
+                }
+                window.getSelection().removeAllRanges();
+            });
+        });
+    </script>
+</body>
+</html>
