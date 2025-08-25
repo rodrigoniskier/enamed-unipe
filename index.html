@@ -239,6 +239,22 @@
                 "XXI. Uso de tecnologias de comunicação e informação..."
             ];
 
+            const regrasRespostaUnica = `
+* As alternativas devem ter paralelismo sintático e semântico (ex: todas começando com verbo).
+* As alternativas devem ser dispostas em ordem lógica (ex: crescente, alfabética).
+* Evitar a repetição de palavras entre o enunciado e as alternativas.
+* Evitar o uso de palavras de conotação negativa (ex: "não") ou termos absolutos (ex: "sempre", "nunca", "todos", "somente").
+* Os distratores (respostas incorretas) devem ser plausíveis e retratar erros comuns.
+`;
+
+            const regrasRespostaMultipla = `
+* As afirmativas (I, II, III...) devem ser independentes umas das outras e do enunciado.
+* Cada afirmativa deve ser uma frase única, com estrutura sintática completa.
+* Deve haver pelo menos uma afirmativa correta e uma incorreta no conjunto.
+* Evitar o uso de palavras de conotação negativa (ex: "não") ou termos absolutos (ex: "sempre", "nunca", "todos", "somente").
+* Na chave de respostas (alternativas A, B, C, D, E), cada afirmativa (I, II, III...) deve aparecer um número equilibrado de vezes.
+`;
+
             // --- LÓGICA DA APLICAÇÃO ---
 
             function populateSelect(selectId, options) {
@@ -281,6 +297,13 @@
                 const dc2 = document.getElementById('dc2').value;
                 const dc3 = document.getElementById('dc3').value;
 
+                let regrasEspecificas = '';
+                if (tipoQuestao === 'Resposta Única') {
+                    regrasEspecificas = regrasRespostaUnica;
+                } else if (tipoQuestao === 'Resposta Múltipla') {
+                    regrasEspecificas = regrasRespostaMultipla;
+                }
+
                 const promptGerado = `
 **Instrução para IA Generativa - Elaboração de Questão para ENAMED 2025**
 
@@ -292,6 +315,9 @@
 1.  **Tipo de Questão:** ${tipoQuestao}.
 2.  **Contexto Clínico:** Crie um cenário clínico detalhado e realista, preferencialmente em um ambiente de Atenção Primária ou Secundária do SUS.
 3.  **Enunciado:** Apresente o caso clínico e formule uma pergunta clara e objetiva.
+
+**Regras Específicas para ${tipoQuestao}:**
+${regrasEspecificas.trim()}
 
 **Diretrizes de Acessibilidade e Cognição:**
 * **Nível Cognitivo (Bloom):** A questão deve ser do nível "${taxonomia}".
