@@ -42,95 +42,123 @@
             background-size: 1.5em 1.5em;
             padding-right: 2.5rem;
         }
+        
+        /* Estilos para o Guia Interativo */
+        .guide-highlight {
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.6);
+            border-radius: 0.5rem;
+            position: relative;
+            z-index: 1001;
+            transition: all 0.3s ease-in-out;
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+        #guide-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        #guide-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+        }
+
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
 
+    <!-- Guia Interativo Modal -->
+    <div id="guide-overlay" class="hidden"></div>
+    <div id="guide-modal" class="hidden bg-white p-6 rounded-lg shadow-2xl w-11/12 max-w-md fade-in">
+        <h3 id="guide-title" class="text-xl font-bold text-gray-800 mb-3">Guia Interativo</h3>
+        <p id="guide-text" class="text-gray-600 mb-5">Texto do guia aqui.</p>
+        <div class="flex justify-between items-center">
+            <button id="guide-close" class="text-sm text-gray-500 hover:text-gray-800">Sair</button>
+            <div>
+                <button id="guide-prev" class="px-4 py-2 text-sm bg-gray-200 rounded-md hover:bg-gray-300 mr-2">Anterior</button>
+                <button id="guide-next" class="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700">Próximo</button>
+            </div>
+        </div>
+    </div>
+
+
     <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-5xl">
         <header class="text-center mb-8">
-            <!-- Adicione o caminho para o seu arquivo logo.png aqui -->
             <img src="logo.png" alt="Logo da Instituição" class="mx-auto h-20 w-auto mb-4" onerror="this.src='https://placehold.co/300x80/007bff/ffffff?text=Sua+Logo+Aqui&font=inter'">
             <h1 class="text-3xl sm:text-4xl font-bold text-blue-700">Gerador de Prompts para ENAMED 2025</h1>
             <p class="text-gray-600 mt-2 text-md sm:text-lg">Crie prompts personalizados para gerar questões de simulados com base nos documentos oficiais.</p>
         </header>
 
-        <main class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+        <main class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg relative">
+             <button id="start-guide" class="absolute top-4 right-4 bg-blue-100 text-blue-700 font-semibold py-2 px-4 rounded-full hover:bg-blue-200 transition-colors text-sm flex items-center">
+                <span class="mr-2">❓</span> Como Usar (Guia)
+            </button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mt-10">
                 <!-- Coluna de Seletores 1 -->
-                <div class="space-y-6">
-                    <div>
+                <div class="space-y-6" id="guide-col-1">
+                    <div id="guide-el-area-primaria">
                         <label for="area-formacao-primaria" class="block text-sm font-medium text-gray-700 mb-1">🩺 Área de Formação Principal (Art. 3º)</label>
                         <select id="area-formacao-primaria" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                            <!-- Opções serão inseridas via JavaScript -->
                         </select>
                     </div>
-                     <div>
+                     <div id="guide-el-area-secundaria">
                         <label for="area-formacao-secundaria" class="block text-sm font-medium text-gray-700 mb-1">➕ Área de Formação Secundária (Opcional)</label>
                         <select id="area-formacao-secundaria" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                            <!-- Opções serão inseridas via JavaScript -->
                         </select>
                     </div>
-                    <div>
+                    <div id="guide-el-perfil">
                         <label for="perfil" class="block text-sm font-medium text-gray-700 mb-1">👤 Perfil do Avaliado (Art. 5º)</label>
                         <select id="perfil" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                            <!-- Opções serão inseridas via JavaScript -->
                         </select>
                     </div>
-                     <div>
+                     <div id="guide-el-competencias">
                         <label for="competencias" class="block text-sm font-medium text-gray-700 mb-1">🎯 Competências (Art. 6º)</label>
                         <select id="competencias" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                            <!-- Opções serão inseridas via JavaScript -->
                         </select>
                     </div>
                 </div>
                 <!-- Coluna de Seletores 2 -->
-                <div class="space-y-6">
-                   <div>
-                        <label for="dc1" class="block text-sm font-medium text-gray-700 mb-1">📚 Domínio de Conteúdo 1 (Art. 8º)</label>
-                        <select id="dc1" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                            <!-- Opções serão inseridas via JavaScript -->
+                <div class="space-y-6" id="guide-col-2">
+                   <div id="guide-el-dc">
+                        <label for="dc1" class="block text-sm font-medium text-gray-700 mb-1">📚 Domínio de Conteúdo 1, 2 e 3 (Art. 8º)</label>
+                        <select id="dc1" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition mb-4">
                         </select>
-                    </div>
-                    <div>
-                        <label for="dc2" class="block text-sm font-medium text-gray-700 mb-1">📚 Domínio de Conteúdo 2 (Art. 8º)</label>
-                        <select id="dc2" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                            <!-- Opções serão inseridas via JavaScript -->
+                        <select id="dc2" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition mb-4">
                         </select>
-                    </div>
-                    <div>
-                        <label for="dc3" class="block text-sm font-medium text-gray-700 mb-1">📚 Domínio de Conteúdo 3 (Art. 8º)</label>
                         <select id="dc3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                            <!-- Opções serão inseridas via JavaScript -->
                         </select>
                     </div>
                 </div>
             </div>
-             <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 mt-6">
-                <div>
+             <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 mt-6" id="guide-col-3">
+                <div id="guide-el-quantidade">
                     <label for="quantidade-questoes" class="block text-sm font-medium text-gray-700 mb-1">🔢 Quantidade de Questões</label>
                     <input type="number" id="quantidade-questoes" value="1" min="1" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
                 </div>
-                <div>
+                <div id="guide-el-bloom">
                     <label for="taxonomia-bloom" class="block text-sm font-medium text-gray-700 mb-1">🧠 Taxonomia de Bloom</label>
                     <select id="taxonomia-bloom" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                        <!-- Opções serão inseridas via JavaScript -->
                     </select>
                 </div>
-                <div>
+                <div id="guide-el-dificuldade">
                     <label for="nivel-dificuldade" class="block text-sm font-medium text-gray-700 mb-1">🔥 Nível de Dificuldade</label>
                     <select id="nivel-dificuldade" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                        <!-- Opções serão inseridas via JavaScript -->
                     </select>
                 </div>
             </div>
-             <div class="mt-6">
+             <div class="mt-6" id="guide-el-tipo">
                 <label for="tipo-questao" class="block text-sm font-medium text-gray-700 mb-1">📝 Tipo de Questão</label>
                 <select id="tipo-questao" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                    <!-- Opções serão inseridas via JavaScript -->
                 </select>
             </div>
 
-            <div class="mt-8 text-center">
+            <div class="mt-8 text-center" id="guide-el-gerar">
                 <button id="gerar-prompt" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-transform transform hover:scale-105 inline-flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
@@ -163,64 +191,36 @@
         document.addEventListener('DOMContentLoaded', function() {
             // --- DADOS EXTRAÍDOS DOS DOCUMENTOS OFICIAIS E PEDAGÓGICOS ---
 
-            const tiposDeQuestao = [
-                "Resposta Única",
-                "Resposta Múltipla"
-            ];
-
-            const taxonomiaBloom = [
-                "Lembrar",
-                "Compreender",
-                "Aplicar",
-                "Analisar",
-                "Avaliar",
-                "Criar"
-            ];
-
-            const niveisDificuldade = [
-                "Fácil",
-                "Médio",
-                "Difícil"
-            ];
-
-            const areasDeFormacao = [
-                "Clínica Médica",
-                "Cirurgia Geral",
-                "Ginecologia e Obstetrícia",
-                "Pediatria",
-                "Medicina da Família e Comunidade",
-                "Saúde Mental",
-                "Saúde Coletiva"
-            ];
-
+            const tiposDeQuestao = ["Resposta Única", "Resposta Múltipla"];
+            const taxonomiaBloom = ["Lembrar", "Compreender", "Aplicar", "Analisar", "Avaliar", "Criar"];
+            const niveisDificuldade = ["Fácil", "Médio", "Difícil"];
+            const areasDeFormacao = ["Clínica Médica", "Cirurgia Geral", "Ginecologia e Obstetrícia", "Pediatria", "Medicina da Família e Comunidade", "Saúde Mental", "Saúde Coletiva"];
             const perfis = [
-                "I. Comprometido com o respeito à singularidade de cada pessoa e grupo social, considerando as diversões biológica, subjetiva, étnico-racial, de gênero, de orientação sexual, socioeconômica, política, ambiental, cultural e ética, visando à equidade, ao acesso, à integralidade e à humanização do cuidado em saúde.",
-                "II. Defensor da cidadania e da dignidade humana, respeitando as relações entre ser humano, o meio ambiente, sociedade e tecnologias e exercendo posição de defesa contra toda e qualquer forma de violência.",
-                "III. Crítico e reflexivo em relação ao seu fazer profissional, combinando conhecimento clínico com as melhores evidências científicas disponíveis, com políticas públicas e com diretrizes vigentes, orientado pelos princípios de custo-efetividade e eficácia.",
-                "IV. Orientado pelos princípios da ética e da bioética na relação com os usuários dos serviços de saúde, na relação com os familiares desses usuários, bem como com a comunidade e com a equipe interprofissional, respeitando a autonomia do paciente e abordando a terminalidade da vida de forma respeitosa e sensível.",
-                "V. Embasado em uma formação geral, atuando na prevenção, promoção, recuperação e reabilitação à saúde, valorizando aspectos epidemiológicos, organizacionais e de gestão do sistema de saúde, tendo como referenciais a determinação social do processo de saúde e de doença e a ênfase na atenção primária à saúde.",
-                "VI. Comprometido com a sua formação continuada e com a sua formação em serviço, bem como com o aprendizado interprofissional e com a formação das futuras gerações de profissionais de saúde.",
-                "VII. Orientado para uma clínica centrada na pessoa, que respeite o saber experiencial do usuário dos serviços de saúde e que articule o cuidado com os demais pontos de atenção da rede de saúde, de forma transdisciplinar, valorizando assim o trabalho em equipe."
+                "I. Comprometido com o respeito à singularidade de cada pessoa e grupo social...",
+                "II. Defensor da cidadania e da dignidade humana...",
+                "III. Crítico e reflexivo em relação ao seu fazer profissional...",
+                "IV. Orientado pelos princípios da ética e da bioética...",
+                "V. Embasado em uma formação geral, atuando na prevenção, promoção, recuperação e reabilitação...",
+                "VI. Comprometido com a sua formação continuada...",
+                "VII. Orientado para uma clínica centrada na pessoa..."
             ];
-
             const competencias = [
                 "I. Respeitar a singularidade de cada pessoa e grupo social...",
-                "II. Formular hipóteses diagnósticas plausíveis e plano propedêutico adequado...",
+                "II. Formular hipóteses diagnósticas plausíveis...",
                 "III. Solicitar e interpretar exames complementares...",
                 "IV. Elaborar, pactuar e acompanhar o plano terapêutico individual...",
                 "V. Reconhecer, diagnosticar e tratar as urgências e as emergências...",
-                "VI. Indicar e realizar procedimentos médicos clínicos ou cirúrgicos...",
+                "VI. Indicar e realizar procedimentos médicos...",
                 "VII. Identificar as necessidades de saúde de grupos de pessoas ou de comunidades...",
                 "VIII. Planejar, implementar, gerenciar e avaliar planos e projetos de intervenção coletiva...",
                 "IX. Identificar e promover os princípios, as diretrizes e as políticas dos sistemas de saúde...",
-                "X. Comunicar-se, por meio de linguagem adequada, verbal e não verbal...",
+                "X. Comunicar-se, por meio de linguagem adequada...",
                 "XI. Aplicar os princípios do trabalho em equipe...",
                 "XII. Registrar no prontuário, de forma clara e objetiva...",
                 "XIII. Respeitar as normas éticas e deontológicas do exercício profissional...",
-                "XIV. Ter atitude autorreflexiva, identificando lacunas de conhecimento...",
-                "XV. Utilizar as novas tecnologias da informação e comunicação na prática médica..."
+                "XIV. Ter atitude autorreflexiva...",
+                "XV. Utilizar as novas tecnologias da informação e comunicação..."
             ];
-
             const dominiosDeConteudo = [
                 "I. Bases moleculares e celulares dos processos normais e alterados...",
                 "II. Processos fisiológicos dos seres humanos nas diferentes fases do ciclo de vida.",
@@ -228,12 +228,12 @@
                 "IV. Ética, bioética, relação médico-paciente e segurança de dados.",
                 "V. Direitos humanos e inclusão...",
                 "VI. Semiologia médica (anamnese e exame físico)...",
-                "VII. Habilidades de comunicação com o paciente, sua família, membros da comunidade...",
+                "VII. Habilidades de comunicação com o paciente...",
                 "VIII. Registro e documentação médica.",
-                "IX. Propedêutica e diagnóstico dos problemas de saúde, doenças e agravos...",
-                "X. Terapêutica dos problemas de saúde, doenças e agravos...",
-                "XI. Prognóstico e prevenção, em diferentes pontos das redes de atenção...",
-                "XII. Reabilitação física e psicossocial baseadas na autonomia...",
+                "IX. Propedêutica e diagnóstico dos problemas de saúde...",
+                "X. Terapêutica dos problemas de saúde...",
+                "XI. Prognóstico e prevenção...",
+                "XII. Reabilitação física e psicossocial...",
                 "XIII. Promoção e educação em saúde.",
                 "XIV. Políticas de saúde e Sistema Único de Saúde (SUS).",
                 "XV. Planejamento e gestão de serviços de saúde.",
@@ -250,16 +250,14 @@
 * As alternativas devem ser dispostas em ordem lógica (ex: crescente, alfabética).
 * Evitar a repetição de palavras entre o enunciado e as alternativas.
 * Evitar o uso de palavras de conotação negativa (ex: "não") ou termos absolutos (ex: "sempre", "nunca", "todos", "somente").
-* Os distratores (respostas incorretas) devem ser plausíveis e retratar erros comuns.
-`;
+* Os distratores (respostas incorretas) devem ser plausíveis e retratar erros comuns.`;
 
             const regrasRespostaMultipla = `
 * As afirmativas (I, II, III...) devem ser independentes umas das outras e do enunciado.
 * Cada afirmativa deve ser uma frase única, com estrutura sintática completa.
 * Deve haver pelo menos uma afirmativa correta e uma incorreta no conjunto.
 * Evitar o uso de palavras de conotação negativa (ex: "não") ou termos absolutos (ex: "sempre", "nunca", "todos", "somente").
-* Na chave de respostas (alternativas A, B, C, D, E), cada afirmativa (I, II, III...) deve aparecer um número equilibrado de vezes.
-`;
+* Na chave de respostas (alternativas A, B, C, D, E), cada afirmativa (I, II, III...) deve aparecer um número equilibrado de vezes.`;
 
             // --- LÓGICA DA APLICAÇÃO ---
 
@@ -295,6 +293,7 @@
             const copyFeedback = document.getElementById('copy-feedback');
 
             gerarBtn.addEventListener('click', function() {
+                // (código de geração de prompt existente)
                 const quantidade = document.getElementById('quantidade-questoes').value;
                 const taxonomia = document.getElementById('taxonomia-bloom').value;
                 const dificuldade = document.getElementById('nivel-dificuldade').value;
@@ -356,7 +355,6 @@ ${areaParametro}
 * **Equilíbrio Visual:** Todas as alternativas (correta e incorretas) devem ter uma extensão (número de palavras/linhas) e complexidade estrutural semelhantes, evitando que a resposta correta se destaque visualmente.
 * Ao final, forneça o gabarito e uma justificativa detalhada para a alternativa correta, explicando o raciocínio clínico e teórico esperado, e por que as outras alternativas estão incorretas.
 `;
-
                 promptTextarea.value = promptGerado.trim();
                 resultadoDiv.classList.remove('hidden');
             });
@@ -366,14 +364,84 @@ ${areaParametro}
                 try {
                     document.execCommand('copy');
                     copyFeedback.classList.remove('hidden');
-                    setTimeout(() => {
-                        copyFeedback.classList.add('hidden');
-                    }, 2000);
-                } catch (err) {
-                    console.error('Falha ao copiar o texto: ', err);
-                }
+                    setTimeout(() => { copyFeedback.classList.add('hidden'); }, 2000);
+                } catch (err) { console.error('Falha ao copiar o texto: ', err); }
                 window.getSelection().removeAllRanges();
             });
+
+            // --- LÓGICA DO GUIA INTERATIVO ---
+            const guideOverlay = document.getElementById('guide-overlay');
+            const guideModal = document.getElementById('guide-modal');
+            const guideTitle = document.getElementById('guide-title');
+            const guideText = document.getElementById('guide-text');
+            const startGuideBtn = document.getElementById('start-guide');
+            const closeGuideBtn = document.getElementById('guide-close');
+            const prevGuideBtn = document.getElementById('guide-prev');
+            const nextGuideBtn = document.getElementById('guide-next');
+
+            const guideSteps = [
+                { id: 'guide-el-area-primaria', title: 'Passo 1: Área de Formação Principal', text: 'Aqui você define o tema central da questão. Por exemplo, escolher "Pediatria" fará com que a IA crie um caso clínico sobre uma criança. Esta é a base para todo o cenário.' },
+                { id: 'guide-el-area-secundaria', title: 'Passo 2: Área de Formação Secundária', text: 'Esta seleção é opcional. Se escolhida, a IA será instruída a criar uma questão interdisciplinar, que conecte a área principal com esta secundária. Exemplo: "Clínica Médica" e "Saúde Mental" para um caso de depressão em um paciente diabético.' },
+                { id: 'guide-el-perfil', title: 'Passo 3: Perfil do Avaliado', text: 'Selecione qual característica do perfil profissional médico (Art. 5º da Portaria) a questão deve avaliar. Ex: escolher "Comunicação" levará a IA a criar um cenário onde a habilidade de comunicação do médico é testada.' },
+                { id: 'guide-el-competencias', title: 'Passo 4: Competências', text: 'Define a habilidade específica (Art. 6º) que o aluno precisa demonstrar para resolver a questão. Ex: "Formular hipóteses diagnósticas" direciona a IA a focar no raciocínio diagnóstico.' },
+                { id: 'guide-el-dc', title: 'Passo 5: Domínios de Conteúdo', text: 'Escolha até três conhecimentos teóricos (Art. 8º) que devem ser integrados na questão. Isso garante a profundidade e a abrangência do item, conectando a base teórica à prática clínica.' },
+                { id: 'guide-el-bloom', title: 'Passo 6: Taxonomia de Bloom', text: 'Define o nível de complexidade cognitiva da questão. "Lembrar" gera questões sobre fatos, enquanto "Criar" exige que o aluno desenvolva uma solução original para um problema.' },
+                { id: 'guide-el-dificuldade', title: 'Passo 7: Nível de Dificuldade', text: 'Ajusta a complexidade geral da questão (Fácil, Médio, Difícil), influenciando a sutileza do caso clínico e a semelhança entre as alternativas corretas e incorretas.' },
+                { id: 'guide-el-tipo', title: 'Passo 8: Tipo de Questão', text: 'Escolha o formato da questão. "Resposta Única" tem apenas uma alternativa correta. "Resposta Múltipla" apresenta várias afirmativas para julgar como certas ou erradas.' },
+                { id: 'guide-el-gerar', title: 'Passo 9: Gerar Prompt', text: 'Após configurar todos os parâmetros, clique aqui. Todas as suas escolhas serão compiladas em um texto de instrução detalhado (o prompt) para a IA.' },
+            ];
+            
+            let currentStep = -1;
+            let highlightedElement = null;
+
+            function showGuideStep(index) {
+                if (highlightedElement) {
+                    highlightedElement.classList.remove('guide-highlight');
+                }
+                
+                if (index < 0 || index >= guideSteps.length) {
+                    closeGuide();
+                    return;
+                }
+
+                currentStep = index;
+                const step = guideSteps[index];
+                
+                guideTitle.textContent = step.title;
+                guideText.textContent = step.text;
+                
+                highlightedElement = document.getElementById(step.id);
+                if (highlightedElement) {
+                    highlightedElement.classList.add('guide-highlight');
+                    highlightedElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+
+                prevGuideBtn.style.visibility = index === 0 ? 'hidden' : 'visible';
+                nextGuideBtn.textContent = index === guideSteps.length - 1 ? 'Finalizar' : 'Próximo';
+            }
+
+            function startGuide() {
+                guideOverlay.classList.remove('hidden');
+                guideModal.classList.remove('hidden');
+                showGuideStep(0);
+            }
+
+            function closeGuide() {
+                guideOverlay.classList.add('hidden');
+                guideModal.classList.add('hidden');
+                if (highlightedElement) {
+                    highlightedElement.classList.remove('guide-highlight');
+                }
+                currentStep = -1;
+                highlightedElement = null;
+            }
+
+            startGuideBtn.addEventListener('click', startGuide);
+            closeGuideBtn.addEventListener('click', closeGuide);
+            guideOverlay.addEventListener('click', closeGuide);
+            prevGuideBtn.addEventListener('click', () => showGuideStep(currentStep - 1));
+            nextGuideBtn.addEventListener('click', () => showGuideStep(currentStep + 1));
+
         });
     </script>
 </body>
