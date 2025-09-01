@@ -66,7 +66,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 1000;
+            z-index: 1002; /* Aumentado para ficar acima de outros elementos */
+            transition: top 0.3s ease-in-out, left 0.3s ease-in-out;
         }
 
     </style>
@@ -414,6 +415,32 @@ ${areaParametro}
                 if (highlightedElement) {
                     highlightedElement.classList.add('guide-highlight');
                     highlightedElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    setTimeout(() => {
+                        const elRect = highlightedElement.getBoundingClientRect();
+                        const modal = document.getElementById('guide-modal');
+                        const modalRect = modal.getBoundingClientRect();
+
+                        let top = elRect.top + (elRect.height / 2) - (modalRect.height / 2);
+                        if (top < 16) top = 16;
+                        if (top + modalRect.height > window.innerHeight - 16) {
+                            top = window.innerHeight - modalRect.height - 16;
+                        }
+                        
+                        let left;
+                        if (elRect.right + modalRect.width + 20 < window.innerWidth) {
+                            left = elRect.right + 10;
+                        } else if (elRect.left - modalRect.width - 20 > 0) {
+                            left = elRect.left - modalRect.width - 10;
+                        } else {
+                            left = (window.innerWidth / 2) - (modalRect.width / 2);
+                        }
+
+                        modal.style.top = `${top}px`;
+                        modal.style.left = `${left}px`;
+                        modal.style.transform = 'none';
+
+                    }, 350);
                 }
 
                 prevGuideBtn.style.visibility = index === 0 ? 'hidden' : 'visible';
@@ -434,6 +461,11 @@ ${areaParametro}
                 }
                 currentStep = -1;
                 highlightedElement = null;
+                
+                const modal = document.getElementById('guide-modal');
+                modal.style.top = '50%';
+                modal.style.left = '50%';
+                modal.style.transform = 'translate(-50%, -50%)';
             }
 
             startGuideBtn.addEventListener('click', startGuide);
