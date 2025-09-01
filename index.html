@@ -159,6 +159,33 @@
                 </select>
             </div>
 
+            <!-- Seção de Acessibilidade -->
+            <div class="mt-6" id="guide-el-acessibilidade">
+                <label class="block text-sm font-medium text-gray-700 mb-2">♿ Acessibilidade para Neurodivergentes</label>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition cursor-pointer">
+                        <input type="checkbox" id="acess-lang-direta" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" checked>
+                        <span class="ml-3 text-sm text-gray-700">Linguagem direta</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition cursor-pointer">
+                        <input type="checkbox" id="acess-sem-negativa" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" checked>
+                        <span class="ml-3 text-sm text-gray-700">Evitar duplas negativas</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition cursor-pointer">
+                        <input type="checkbox" id="acess-negrito" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" checked>
+                        <span class="ml-3 text-sm text-gray-700">Destacar em negrito</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition cursor-pointer">
+                        <input type="checkbox" id="acess-paragrafos" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" checked>
+                        <span class="ml-3 text-sm text-gray-700">Parágrafos curtos</span>
+                    </label>
+                     <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition cursor-pointer">
+                        <input type="checkbox" id="acess-espacamento" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" checked>
+                        <span class="ml-3 text-sm text-gray-700">Bom espaçamento</span>
+                    </label>
+                </div>
+            </div>
+
             <div class="mt-8 text-center" id="guide-el-gerar">
                 <button id="gerar-prompt" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-transform transform hover:scale-105 inline-flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -294,7 +321,6 @@
             const copyFeedback = document.getElementById('copy-feedback');
 
             gerarBtn.addEventListener('click', function() {
-                // (código de geração de prompt existente)
                 const quantidade = document.getElementById('quantidade-questoes').value;
                 const taxonomia = document.getElementById('taxonomia-bloom').value;
                 const dificuldade = document.getElementById('nivel-dificuldade').value;
@@ -318,7 +344,18 @@
                 if (areaFormacaoSecundaria && areaFormacaoSecundaria !== "Nenhuma") {
                     areaParametro += `\n* **Área de Formação Médica Secundária (Art. 3º):** ${areaFormacaoSecundaria}\n\n**Integração de Áreas:** O cenário clínico e a pergunta devem ABRANGER E INTEGRAR conhecimentos de AMBAS as áreas de formação selecionadas (Principal e Secundária).`;
                 }
-
+                
+                const diretrizesAcessibilidade = [];
+                if (document.getElementById('acess-lang-direta').checked) diretrizesAcessibilidade.push('Use linguagem direta e clara');
+                if (document.getElementById('acess-sem-negativa').checked) diretrizesAcessibilidade.push('evite duplas negativas');
+                if (document.getElementById('acess-negrito').checked) diretrizesAcessibilidade.push('destaque em **negrito** os termos e informações mais importantes no enunciado');
+                if (document.getElementById('acess-paragrafos').checked) diretrizesAcessibilidade.push('utilize parágrafos curtos');
+                if (document.getElementById('acess-espacamento').checked) diretrizesAcessibilidade.push('garanta um bom espaçamento entre as linhas e as alternativas');
+                
+                let acessibilidadePrompt = '';
+                if (diretrizesAcessibilidade.length > 0) {
+                    acessibilidadePrompt = `* **Formatação para Neurodivergentes:** Elabore a questão com atenção à acessibilidade cognitiva: ${diretrizesAcessibilidade.join(', ')}. Facilite a leitura para reduzir a carga cognitiva.`
+                }
 
                 const promptGerado = `
 **Instrução para IA Generativa - Elaboração de Questão para ENAMED 2025**
@@ -335,10 +372,10 @@
 **Regras Específicas para ${tipoQuestao}:**
 ${regrasEspecificas.trim()}
 
-**Diretrizes de Acessibilidade e Cognição:**
+**Diretrizes de Cognição e Acessibilidade:**
 * **Nível Cognitivo (Bloom):** A questão deve ser do nível "${taxonomia}".
 * **Nível de Dificuldade:** ${dificuldade}.
-* **Formatação para Neurodivergentes:** Elabore a questão com atenção à acessibilidade cognitiva. Use linguagem direta e clara, evite duplas negativas. Destaque em **negrito** os termos e informações mais importantes no enunciado. Utilize parágrafos curtos e garanta um bom espaçamento entre as linhas e as alternativas para facilitar a leitura e reduzir a carga cognitiva.
+${acessibilidadePrompt}
 
 **Parâmetros a serem Avaliados:**
 ${areaParametro}
@@ -389,7 +426,8 @@ ${areaParametro}
                 { id: 'guide-el-bloom', title: 'Passo 6: Taxonomia de Bloom', text: 'Define o nível de complexidade cognitiva da questão. "Lembrar" gera questões sobre fatos, enquanto "Criar" exige que o aluno desenvolva uma solução original para um problema.' },
                 { id: 'guide-el-dificuldade', title: 'Passo 7: Nível de Dificuldade', text: 'Ajusta a complexidade geral da questão (Fácil, Médio, Difícil), influenciando a sutileza do caso clínico e a semelhança entre as alternativas corretas e incorretas.' },
                 { id: 'guide-el-tipo', title: 'Passo 8: Tipo de Questão', text: 'Escolha o formato da questão. "Resposta Única" tem apenas uma alternativa correta. "Resposta Múltipla" apresenta várias afirmativas para julgar como certas ou erradas.' },
-                { id: 'guide-el-gerar', title: 'Passo 9: Gerar Prompt', text: 'Após configurar todos os parâmetros, clique aqui. Todas as suas escolhas serão compiladas em um texto de instrução detalhado (o prompt) para a IA.' },
+                { id: 'guide-el-acessibilidade', title: 'Passo 9: Acessibilidade', text: 'Selecione as diretrizes de acessibilidade para alunos neurodivergentes. Cada item selecionado será adicionado como uma instrução específica no prompt, moldando a questão para ser mais clara e acessível.' },
+                { id: 'guide-el-gerar', title: 'Passo 10: Gerar Prompt', text: 'Após configurar todos os parâmetros, clique aqui. Todas as suas escolhas serão compiladas em um texto de instrução detalhado (o prompt) para a IA.' },
             ];
             
             let currentStep = -1;
