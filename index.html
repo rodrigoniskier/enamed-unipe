@@ -59,8 +59,14 @@
                 <!-- Coluna de Seletores 1 -->
                 <div class="space-y-6">
                     <div>
-                        <label for="area-formacao" class="block text-sm font-medium text-gray-700 mb-1">🩺 Área de Formação Médica (Art. 3º)</label>
-                        <select id="area-formacao" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                        <label for="area-formacao-primaria" class="block text-sm font-medium text-gray-700 mb-1">🩺 Área de Formação Principal (Art. 3º)</label>
+                        <select id="area-formacao-primaria" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                            <!-- Opções serão inseridas via JavaScript -->
+                        </select>
+                    </div>
+                     <div>
+                        <label for="area-formacao-secundaria" class="block text-sm font-medium text-gray-700 mb-1">➕ Área de Formação Secundária (Opcional)</label>
+                        <select id="area-formacao-secundaria" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
                             <!-- Opções serão inseridas via JavaScript -->
                         </select>
                     </div>
@@ -268,11 +274,14 @@
                     select.appendChild(option);
                 });
             }
+            
+            const secondaryAreas = ["Nenhuma", ...areasDeFormacao];
 
             populateSelect('tipo-questao', tiposDeQuestao);
             populateSelect('taxonomia-bloom', taxonomiaBloom);
             populateSelect('nivel-dificuldade', niveisDificuldade);
-            populateSelect('area-formacao', areasDeFormacao);
+            populateSelect('area-formacao-primaria', areasDeFormacao);
+            populateSelect('area-formacao-secundaria', secondaryAreas);
             populateSelect('perfil', perfis);
             populateSelect('competencias', competencias);
             populateSelect('dc1', dominiosDeConteudo);
@@ -290,7 +299,8 @@
                 const taxonomia = document.getElementById('taxonomia-bloom').value;
                 const dificuldade = document.getElementById('nivel-dificuldade').value;
                 const tipoQuestao = document.getElementById('tipo-questao').value;
-                const areaFormacao = document.getElementById('area-formacao').value;
+                const areaFormacaoPrimaria = document.getElementById('area-formacao-primaria').value;
+                const areaFormacaoSecundaria = document.getElementById('area-formacao-secundaria').value;
                 const perfil = document.getElementById('perfil').value;
                 const competencias = document.getElementById('competencias').value;
                 const dc1 = document.getElementById('dc1').value;
@@ -303,6 +313,12 @@
                 } else if (tipoQuestao === 'Resposta Múltipla') {
                     regrasEspecificas = regrasRespostaMultipla;
                 }
+                
+                let areaParametro = `* **Área de Formação Médica Principal (Art. 3º):** ${areaFormacaoPrimaria}`;
+                if (areaFormacaoSecundaria && areaFormacaoSecundaria !== "Nenhuma") {
+                    areaParametro += `\n* **Área de Formação Médica Secundária (Art. 3º):** ${areaFormacaoSecundaria}\n\n**Integração de Áreas:** O cenário clínico e a pergunta devem ABRANGER E INTEGRAR conhecimentos de AMBAS as áreas de formação selecionadas (Principal e Secundária).`;
+                }
+
 
                 const promptGerado = `
 **Instrução para IA Generativa - Elaboração de Questão para ENAMED 2025**
@@ -325,7 +341,7 @@ ${regrasEspecificas.trim()}
 * **Formatação para Neurodivergentes:** Elabore a questão com atenção à acessibilidade cognitiva. Use linguagem direta e clara, evite duplas negativas. Destaque em **negrito** os termos e informações mais importantes no enunciado. Utilize parágrafos curtos e garanta um bom espaçamento entre as linhas e as alternativas para facilitar a leitura e reduzir a carga cognitiva.
 
 **Parâmetros a serem Avaliados:**
-* **Área de Formação Médica Principal (Art. 3º):** ${areaFormacao}
+${areaParametro}
 * **Perfil do Avaliado (Art. 5º):** A questão deve ser elaborada para que o candidato demonstre o seguinte perfil: "${perfil}"
 * **Competências Essenciais (Art. 6º):** A resolução da questão deve exigir a aplicação da seguinte competência: "${competencias}"
 * **Domínio de Conteúdos (Art. 8º):** A questão deve abordar, de forma integrada, os seguintes domínios de conteúdo:
@@ -361,3 +377,4 @@ ${regrasEspecificas.trim()}
     </script>
 </body>
 </html>
+
