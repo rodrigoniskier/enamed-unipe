@@ -110,7 +110,7 @@
         <header class="text-center mb-8">
             <div class="flex justify-center items-center space-x-8 mb-4">
                 <img src="logo.png" alt="Logo da Instituição" class="h-20 w-auto" onerror="this.src='https://placehold.co/300x80/007bff/ffffff?text=Sua+Logo+Aqui&font=inter'">
-                <img src="naped.png" alt="Logo do NAPED" class="h-20 w-auto" onerror="this.src='https://placehold.co/300x80/cccccc/ffffff?text=NAPED&font=inter'">
+                <img src="naped.jpg" alt="Logo do NAPED" class="h-20 w-auto" onerror="this.src='https://placehold.co/300x80/cccccc/ffffff?text=NAPED&font=inter'">
             </div>
             <h1 class="text-3xl sm:text-4xl font-bold text-blue-700">Gerador de Prompts para ENAMED 2025</h1>
             <p class="text-gray-600 mt-2 text-md sm:text-lg">Crie prompts personalizados para gerar questões de simulados com base nos documentos oficiais.</p>
@@ -177,6 +177,12 @@
                 <label for="tipo-questao" class="block text-sm font-medium text-gray-700 mb-1">📝 Tipo de Questão</label>
                 <select id="tipo-questao" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
                 </select>
+            </div>
+            
+            <!-- Caixa de Observações do Professor -->
+            <div class="mt-6" id="guide-el-observacoes">
+                <label for="observacoes-professor" class="block text-sm font-medium text-gray-700 mb-1">📋 Observações do Professor (Opcional)</label>
+                <textarea id="observacoes-professor" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Ex: abordar o diagnóstico diferencial de dor torácica em jovens, focando em causas não cardíacas..."></textarea>
             </div>
 
             <!-- Seção de Acessibilidade -->
@@ -365,6 +371,7 @@
                 const dc1 = document.getElementById('dc1').value;
                 const dc2 = document.getElementById('dc2').value;
                 const dc3 = document.getElementById('dc3').value;
+                const observacoes = document.getElementById('observacoes-professor').value;
 
                 let regrasEspecificas = '';
                 if (tipoQuestao === 'Resposta Única') {
@@ -376,6 +383,11 @@
                 let areaParametro = `* **Área de Formação Médica Principal (Art. 3º):** ${areaFormacaoPrimaria}`;
                 if (areaFormacaoSecundaria && areaFormacaoSecundaria !== "Nenhuma") {
                     areaParametro += `\n* **Área de Formação Médica Secundária (Art. 3º):** ${areaFormacaoSecundaria}\n\n**Integração de Áreas:** O cenário clínico e a pergunta devem ABRANGER E INTEGRAR conhecimentos de AMBAS as áreas de formação selecionadas (Principal e Secundária).`;
+                }
+
+                let observacoesPrompt = '';
+                if (observacoes && observacoes.trim() !== '') {
+                    observacoesPrompt = `\n* **Observações Específicas do Professor:** ${observacoes.trim()}`
                 }
                 
                 const diretrizesAcessibilidade = [];
@@ -411,7 +423,7 @@ ${regrasEspecificas.trim()}
 ${acessibilidadePrompt}
 
 **Parâmetros a serem Avaliados:**
-${areaParametro}
+${areaParametro}${observacoesPrompt}
 * **Perfil do Avaliado (Art. 5º):** A questão deve ser elaborada para que o candidato demonstre o seguinte perfil: "${perfil}"
 * **Competências Essenciais (Art. 6º):** A resolução da questão deve exigir a aplicação da seguinte competência: "${competencias}"
 * **Domínio de Conteúdos (Art. 8º):** A questão deve abordar, de forma integrada, os seguintes domínios de conteúdo:
@@ -472,8 +484,9 @@ ${areaParametro}
                 { id: 'guide-el-bloom', title: 'Passo 6: Taxonomia de Bloom', text: 'Define o nível de complexidade cognitiva da questão. "Lembrar" gera questões sobre fatos, enquanto "Criar" exige que o aluno desenvolva uma solução original para um problema.' },
                 { id: 'guide-el-dificuldade', title: 'Passo 7: Nível de Dificuldade', text: 'Ajusta a complexidade geral da questão (Fácil, Médio, Difícil), influenciando a sutileza do caso clínico e a semelhança entre as alternativas corretas e incorretas.' },
                 { id: 'guide-el-tipo', title: 'Passo 8: Tipo de Questão', text: 'Escolha o formato da questão. "Resposta Única" tem apenas uma alternativa correta. "Resposta Múltipla" apresenta várias afirmativas para julgar como certas ou erradas.' },
-                { id: 'guide-el-acessibilidade', title: 'Passo 9: Acessibilidade', text: 'Selecione as diretrizes de acessibilidade para alunos neurodivergentes. Cada item selecionado será adicionado como uma instrução específica no prompt, moldando a questão para ser mais clara e acessível.' },
-                { id: 'guide-el-gerar', title: 'Passo 10: Gerar Prompt', text: 'Após configurar todos os parâmetros, clique aqui. Todas as suas escolhas serão compiladas em um texto de instrução detalhado (o prompt) para a IA.' },
+                { id: 'guide-el-observacoes', title: 'Passo 9: Observações do Professor', text: 'Este campo opcional permite que você dê instruções textuais diretas para a IA. Use-o para especificar um detalhe clínico, um diagnóstico diferencial, ou um contexto particular que a questão deve abordar.' },
+                { id: 'guide-el-acessibilidade', title: 'Passo 10: Acessibilidade', text: 'Selecione as diretrizes de acessibilidade para alunos neurodivergentes. Cada item selecionado será adicionado como uma instrução específica no prompt, moldando a questão para ser mais clara e acessível.' },
+                { id: 'guide-el-gerar', title: 'Passo 11: Gerar Prompt', text: 'Após configurar todos os parâmetros, clique aqui. Todas as suas escolhas serão compiladas em um texto de instrução detalhado (o prompt) para a IA.' },
             ];
             
             let currentStep = -1;
@@ -562,4 +575,5 @@ ${areaParametro}
     </script>
 </body>
 </html>
+"
 
