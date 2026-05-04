@@ -74,7 +74,6 @@
 </head>
 <body class="bg-gray-100 text-gray-800">
 
-    <!-- Guia Interativo Modal -->
     <div id="guide-overlay" class="hidden"></div>
     <div id="guide-modal" class="hidden bg-white p-6 rounded-lg shadow-2xl w-11/12 max-w-md fade-in">
         <h3 id="guide-title" class="text-xl font-bold text-gray-800 mb-3">Guia Interativo</h3>
@@ -88,7 +87,6 @@
         </div>
     </div>
 
-    <!-- Alert Modal -->
     <div id="alert-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[1010]"></div>
     <div id="alert-modal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-2xl w-11/12 max-w-lg z-[1011] fade-in">
         <div class="text-center">
@@ -121,7 +119,6 @@
                 <span class="mr-2">❓</span> Como Usar (Guia)
             </button>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mt-10">
-                <!-- Coluna de Seletores 1 -->
                 <div class="space-y-6" id="guide-col-1">
                     <div id="guide-el-area-primaria">
                         <label for="area-formacao-primaria" class="block text-sm font-medium text-gray-700 mb-1">🩺 Área de Formação Principal (Art. 3º)</label>
@@ -144,7 +141,6 @@
                         </select>
                     </div>
                 </div>
-                <!-- Coluna de Seletores 2 -->
                 <div class="space-y-6" id="guide-col-2">
                    <div id="guide-el-dc">
                         <label for="dc1" class="block text-sm font-medium text-gray-700 mb-1">📚 Domínio de Conteúdo 1, 2 e 3 (Art. 8º)</label>
@@ -179,13 +175,11 @@
                 </select>
             </div>
             
-            <!-- Caixa de Observações do Professor -->
             <div class="mt-6" id="guide-el-observacoes">
                 <label for="observacoes-professor" class="block text-sm font-medium text-gray-700 mb-1">📋 Observações do Professor (Opcional)</label>
                 <textarea id="observacoes-professor" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Ex: abordar o diagnóstico diferencial de dor torácica em jovens, focando em causas não cardíacas..."></textarea>
             </div>
 
-            <!-- Seção de Acessibilidade -->
             <div class="mt-6" id="guide-el-acessibilidade">
                 <label class="block text-sm font-medium text-gray-700 mb-2">♿ Acessibilidade para Neurodivergentes</label>
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -253,7 +247,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             // --- DADOS EXTRAÍDOS DOS DOCUMENTOS OFICIAIS E PEDAGÓGICOS ---
 
-            const tiposDeQuestao = ["Resposta Única", "Resposta Múltipla"];
+            // PASSO 1: Adicionei o novo tipo de questão na lista
+            const tiposDeQuestao = ["Resposta Única", "Resposta Múltipla", "Asserção-Razão"];
+            
             const taxonomiaBloom = ["Lembrar", "Compreender", "Aplicar", "Analisar", "Avaliar", "Criar"];
             const niveisDificuldade = ["Fácil", "Médio", "Difícil"];
             const areasDeFormacao = ["Clínica Médica", "Cirurgia Geral", "Ginecologia e Obstetrícia", "Pediatria", "Medicina da Família e Comunidade", "Saúde Mental", "Saúde Coletiva"];
@@ -307,19 +303,32 @@
                 "XXI. Uso de tecnologias de comunicação e informação..."
             ];
 
+            // PASSO 2: Ajustei as regras existentes para ficarem 100% alinhadas com o manual (ex: 5 alternativas explícitas)
             const regrasRespostaUnica = `
 * As alternativas devem ter paralelismo sintático e semântico (ex: todas começando com verbo).
-* As alternativas devem ser dispostas em ordem lógica (ex: crescente, alfabética).
+* As alternativas devem ser dispostas em ordem lógica (ex: crescente, alfabética ou em forma trapezoidal).
 * Evitar a repetição de palavras entre o enunciado e as alternativas.
 * Evitar o uso de palavras de conotação negativa (ex: "não") ou termos absolutos (ex: "sempre", "nunca", "todos", "somente").
 * Os distratores (respostas incorretas) devem ser plausíveis e retratar erros comuns.`;
 
             const regrasRespostaMultipla = `
 * As afirmativas (I, II, III...) devem ser independentes umas das outras e do enunciado.
-* Cada afirmativa deve ser uma frase única, com estrutura sintática completa.
+* Cada afirmativa deve ser uma frase única, com estrutura sintática completa, encerrando em ponto final.
 * Deve haver pelo menos uma afirmativa correta e uma incorreta no conjunto.
-* Evitar o uso de palavras de conotação negativa (ex: "não") ou termos absolutos (ex: "sempre", "nunca", "todos", "somente").
-* Na chave de respostas (alternativas A, B, C, D), cada afirmativa (I, II, III...) deve aparecer um número equilibrado de vezes.`;
+* Evitar o uso de palavras de conotação negativa ou termos absolutos (ex: "sempre", "nunca", "todos", "somente").
+* Na chave de respostas, cada afirmativa (I, II, III...) deve aparecer um número equilibrado de vezes.`;
+
+            // PASSO 3: Criei as regras específicas para a questão Asserção-Razão
+            const regrasAssercaoRazao = `
+* O item deve ser constituído de duas proposições (I e II) que podem ou não ser corretas.
+* As duas proposições devem ser interligadas obrigatoriamente pela palavra "PORQUE".
+* O enunciado deve solicitar que o aluno avalie se as proposições estão corretas e se a segunda justifica a primeira.
+* As opções de resposta devem seguir ESTRITAMENTE o seguinte padrão:
+  A) As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.
+  B) As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.
+  C) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.
+  D) A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.
+  E) As asserções I e II são proposições falsas.`;
 
             // --- LÓGICA DA APLICAÇÃO ---
 
@@ -373,11 +382,19 @@
                 const dc3 = document.getElementById('dc3').value;
                 const observacoes = document.getElementById('observacoes-professor').value;
 
+                // PASSO 4: Adicionei a lógica para selecionar as regras e a estrutura correta de justificativa para o prompt
                 let regrasEspecificas = '';
+                let formatoJustificativa = '';
+
                 if (tipoQuestao === 'Resposta Única') {
                     regrasEspecificas = regrasRespostaUnica;
+                    formatoJustificativa = `* Ao final, forneça o gabarito e uma justificativa detalhada. A justificativa deve avaliar cada alternativa precedida pela palavra "(A) CERTA" ou "(A) ERRADA", explicando o raciocínio clínico e teórico esperado.`;
                 } else if (tipoQuestao === 'Resposta Múltipla') {
                     regrasEspecificas = regrasRespostaMultipla;
+                    formatoJustificativa = `* Ao final, forneça o gabarito e uma justificativa detalhada. A justificativa deve avaliar cada afirmativa precedida pela palavra "(I) CERTA" ou "(I) ERRADA", justificando o erro ou acerto de cada uma.`;
+                } else if (tipoQuestao === 'Asserção-Razão') {
+                    regrasEspecificas = regrasAssercaoRazao;
+                    formatoJustificativa = `* Ao final, forneça o gabarito e uma justificativa detalhada. A justificativa deve avaliar a asserção (I) como CERTA/ERRADA, a asserção (II) como CERTA/ERRADA e, logo após, explicar explicitamente se há ou não uma Relação de Causalidade entre elas.`;
                 }
                 
                 let areaParametro = `* **Área de Formação Médica Principal (Art. 3º):** ${areaFormacaoPrimaria}`;
@@ -402,6 +419,7 @@
                     acessibilidadePrompt = `* **Formatação para Neurodivergentes:** Elabore a questão com atenção à acessibilidade cognitiva: ${diretrizesAcessibilidade.join(', ')}. Facilite a leitura para reduzir a carga cognitiva.`
                 }
 
+                // PASSO 5: Atualizei o texto de geração exigindo as exatas 5 alternativas (A, B, C, D, E)
                 const promptGerado = `
 **Instrução para IA Generativa - Elaboração de Questão para ENAMED 2025**
 
@@ -432,11 +450,11 @@ ${areaParametro}${observacoesPrompt}
     3.  ${dc3}
 
 **Formato da Resposta:**
-* Apresente 4 alternativas (A, B, C, D).
+* Apresente EXATAMENTE 5 alternativas (A, B, C, D, E).
 * Apenas uma alternativa deve ser a correta.
 * As alternativas incorretas (distratores) devem ser plausíveis, mas conceitualmente erradas.
 * **Equilíbrio Visual:** Todas as alternativas (correta e incorretas) devem ter uma extensão (número de palavras/linhas) e complexidade estrutural semelhantes, evitando que a resposta correta se destaque visualmente.
-* Ao final, forneça o gabarito e uma justificativa detalhada para a alternativa correta, explicando o raciocínio clínico e teórico esperado, e por que as outras alternativas estão incorretas.
+${formatoJustificativa}
 `;
                 promptTextarea.value = promptGerado.trim();
                 resultadoDiv.classList.remove('hidden');
@@ -483,7 +501,7 @@ ${areaParametro}${observacoesPrompt}
                 { id: 'guide-el-dc', title: 'Passo 5: Domínios de Conteúdo', text: 'Escolha até três conhecimentos teóricos (Art. 8º) que devem ser integrados na questão. Isso garante a profundidade e a abrangência do item, conectando a base teórica à prática clínica.' },
                 { id: 'guide-el-bloom', title: 'Passo 6: Taxonomia de Bloom', text: 'Define o nível de complexidade cognitiva da questão. "Lembrar" gera questões sobre fatos, enquanto "Criar" exige que o aluno desenvolva uma solução original para um problema.' },
                 { id: 'guide-el-dificuldade', title: 'Passo 7: Nível de Dificuldade', text: 'Ajusta a complexidade geral da questão (Fácil, Médio, Difícil), influenciando a sutileza do caso clínico e a semelhança entre as alternativas corretas e incorretas.' },
-                { id: 'guide-el-tipo', title: 'Passo 8: Tipo de Questão', text: 'Escolha o formato da questão. "Resposta Única" tem apenas uma alternativa correta. "Resposta Múltipla" apresenta várias afirmativas para julgar como certas ou erradas.' },
+                { id: 'guide-el-tipo', title: 'Passo 8: Tipo de Questão', text: 'Escolha o formato da questão. "Resposta Única", "Resposta Múltipla" ou "Asserção-Razão".' },
                 { id: 'guide-el-observacoes', title: 'Passo 9: Observações do Professor', text: 'Este campo opcional permite que você dê instruções textuais diretas para a IA. Use-o para especificar um detalhe clínico, um diagnóstico diferencial, ou um contexto particular que a questão deve abordar.' },
                 { id: 'guide-el-acessibilidade', title: 'Passo 10: Acessibilidade', text: 'Selecione as diretrizes de acessibilidade para alunos neurodivergentes. Cada item selecionado será adicionado como uma instrução específica no prompt, moldando a questão para ser mais clara e acessível.' },
                 { id: 'guide-el-gerar', title: 'Passo 11: Gerar Prompt', text: 'Após configurar todos os parâmetros, clique aqui. Todas as suas escolhas serão compiladas em um texto de instrução detalhado (o prompt) para a IA.' },
@@ -575,5 +593,3 @@ ${areaParametro}${observacoesPrompt}
     </script>
 </body>
 </html>
-"
-
