@@ -303,7 +303,7 @@
                 "XXI. Uso de tecnologias de comunicação e informação..."
             ];
 
-            // PASSO 2: Ajustei as regras existentes para ficarem 100% alinhadas com o manual (ex: 5 alternativas explícitas)
+            // PASSO 2: Ajustei as regras existentes para ficarem 100% alinhadas com o manual (ex: 4 alternativas explícitas)
             const regrasRespostaUnica = `
 * As alternativas devem ter paralelismo sintático e semântico (ex: todas começando com verbo).
 * As alternativas devem ser dispostas em ordem lógica (ex: crescente, alfabética ou em forma trapezoidal).
@@ -419,7 +419,7 @@
                     acessibilidadePrompt = `* **Formatação para Neurodivergentes:** Elabore a questão com atenção à acessibilidade cognitiva: ${diretrizesAcessibilidade.join(', ')}. Facilite a leitura para reduzir a carga cognitiva.`
                 }
 
-                // PASSO 5: Atualizei o texto de geração exigindo as exatas 5 alternativas (A, B, C, D, E)
+                // PASSO 5: Atualizei o texto de geração exigindo as exatas 4 alternativas (A, B, C, D)
                 const promptGerado = `
 **Instrução para IA Generativa - Elaboração de Questão para ENAMED 2025**
 
@@ -450,7 +450,7 @@ ${areaParametro}${observacoesPrompt}
     3.  ${dc3}
 
 **Formato da Resposta:**
-* Apresente EXATAMENTE 5 alternativas (A, B, C, D, E).
+* Apresente EXATAMENTE 4 alternativas (A, B, C, D).
 * Apenas uma alternativa deve ser a correta.
 * As alternativas incorretas (distratores) devem ser plausíveis, mas conceitualmente erradas.
 * **Equilíbrio Visual:** Todas as alternativas (correta e incorretas) devem ter uma extensão (número de palavras/linhas) e complexidade estrutural semelhantes, evitando que a resposta correta se destaque visualmente.
